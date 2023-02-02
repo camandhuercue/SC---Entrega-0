@@ -4,7 +4,7 @@ import db
 
 app = Flask(__name__)
 
-app.secret_key = 'ds4%%4rfdsf&&$34/.__$/((dsdsada"'
+app.secret_key = ''
 
 @app.route("/")
 @app.route("/index")
