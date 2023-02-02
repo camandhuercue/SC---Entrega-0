@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <title>Eventos</title>
+  </head>
+  <body>
+    <header class="bd-header bg-dark py-3 d-flex align-items-stretch border-bottom border-dark">
+      <div class="container-fluid d-flex align-items-center">
+        <h1 class="d-flex align-items-center fs-4 text-white mb-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-calendar me-3" viewBox="0 0 16 16">
+                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+            </svg>
+        Gestor de Eventos
+        </h1>
+        <a href="/logout" class="ms-auto link-light" hreflang="ar">logout</a>
+      </div>
+    </header>
+    <main>
+        <div class="px-4 py-5 my-5 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" fill="currentColor" class="bi bi-calendar-event" viewBox="0 0 16 16">
+                <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
+                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+              </svg>
+            <h1 class="display-5 fw-bold">Eventos</h1>
+            <div class="col-lg-6 mx-auto">
+                <p class="lead mb-4">{{ nombre_usuario|safe }}, aquí podrás encontrar tus eventos programados</p>
+                <div class="p-4 p-md-5 border rounded-3 bg-light">
+                    <div class="container text-center mb-3">
+                        <div class="row align-items-start">
+                          <div class="col">
+                            Nombre del Evento
+                          </div>
+                          <div class="col">
+                            Fecha Inicio
+                          </div>
+                          <div class="col">
+                            Fecha Final
+                          </div>
+                          <div class="col">
+                            Opciones
+                          </div>
+                        </div>
+                    </div>
+                    {{ template|safe }}
+                    </div>
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <button type="button" class="btn btn-primary btn-lg px-4 gap-3" onclick="location.href = 'nuevo_evento';">Crear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+  </body>
+</html>
