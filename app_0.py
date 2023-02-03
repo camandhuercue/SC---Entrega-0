@@ -4,7 +4,7 @@ import db
 
 app = Flask(__name__)
 
-app.secret_key = ''
+app.secret_key = '$$%2342432423"##4rewr!'
 
 @app.route("/")
 @app.route("/index")
@@ -147,14 +147,29 @@ def registro():
             mensaje_passwd2 = '<small class="text-muted">Este campo es Necesario</small>'
         if (passwd1 == passwd2) and (len(passwd1) != 0):
             if len(db.select_user(correo)) > 0:
-                return "<p>El usuario ya existe</p>"
+                error = """
+                  <div class="alert alert-danger form-floating mb-3" role="alert">
+                      <div>
+                          Error en registro: El usuario ya existe.
+                      </div>
+                  </div>
+"""
+                return render_template('index.html', error=error)
             hash_pw = hash_passwd.hash_passwd(bytes(passwd1, 'utf-8')).decode("utf-8")
             data = (correo, nombre, hash_pw)
             try:
                 db.insert_user(data)
-                return "<p>exitoso</p>"
+                return redirect('/')
             except:
-                return "<p>error</p>"
+                error = """
+                  <div class="alert alert-danger form-floating mb-3" role="alert">
+                      <div>
+                          Error en registro.
+                      </div>
+                  </div>
+"""
+                
+                return render_template('index.html', error=error)
         else:
             if error_passwd2 == "":
                 error_passwd2 = "is-invalid"
