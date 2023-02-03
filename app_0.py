@@ -17,6 +17,13 @@ def index():
 
 @app.route("/login", methods=['POST', 'GET'])
 def login():
+    error = """
+                  <div class="alert alert-danger form-floating mb-3" role="alert">
+                      <div>
+                          Usuario o Contraseña Erronea
+                      </div>
+                  </div>
+"""
     if request.method == 'GET':
         return redirect('/')
     elif request.method == 'POST':
@@ -24,7 +31,7 @@ def login():
         contrasena = request.form['passwd']
         resultado = db.select_user(usuario)
         if len(resultado) == 0:
-            return "<p>usuario no existe</p>"
+            return render_template('index.html', error=error)
         for r in resultado:
             user, name, hash = r
             flag = hash_passwd.check_passwd(bytes(contrasena, 'utf-8'), bytes(hash, 'utf-8'))
@@ -32,7 +39,7 @@ def login():
                 session['user'] = usuario
                 return redirect('/eventos')
             else:
-                return "<p>usuario o contraseña erronea</p>"
+                return render_template('index.html', error=error)
 
 @app.route("/logout")
 def logout():
@@ -156,13 +163,11 @@ def registro():
 
 @app.route("/evento/<int:id>")
 def mod_evento(id):
-    print(id)
     if request.method == "GET":
         if not session.get("user"):
             return redirect('/')
         usuario = session.get("user")
         evento = db.select_event(usuario, id)
-        print(len(evento))
         if len(evento) == 0:
             return redirect('/eventos')
         for e in evento:
@@ -202,9 +207,70 @@ def modificar_evento(id):
         evento = db.select_event(usuario, id)
         if len(evento) == 0:
             return redirect('/eventos')
+        resultado = db.select_user(usuario)
+        for r in resultado:
+            user, name, hash = r
         for e in evento:
             id, user, nombre_evento, categoria_evento, lugar_evento, directorio_evento, fecha_inicio, fecha_fin, modo_evento = e
-        return render_template('editar_evento.html', id=id, nombre_user=usuario, nombre_evento=nombre_evento, tipo_evento=categoria_evento, lugar_evento=lugar_evento, direccion_evento=directorio_evento, fechai_evento=fecha_inicio, fechaf_evento=fecha_fin, modo_evento=modo_evento)
+
+        Conferencia = """
+                      <select class="form-select" aria-label="Default select example" name="tipo_evento">
+                        <option selected>Conferencia</option>
+                        <option value="Seminario">Seminario</option>
+                        <option value="Congreso">Congreso</option>
+                        <option value="Curso">Curso</option>
+                      </select>
+"""
+        Seminario = """
+                      <select class="form-select" aria-label="Default select example" name="tipo_evento">
+                        <option selected>Seminario</option>
+                        <option value="Conferencia">Conferencia</option>
+                        <option value="Congreso">Congreso</option>
+                        <option value="Curso">Curso</option>
+                      </select>
+"""
+        Congreso = """
+                      <select class="form-select" aria-label="Default select example" name="tipo_evento">
+                        <option selected>Congreso</option>
+                        <option value="Seminario">Seminario</option>
+                        <option value="Conferencia">Conferencia</option>
+                        <option value="Curso">Curso</option>
+                      </select>
+"""
+        Curso = """
+                      <select class="form-select" aria-label="Default select example" name="tipo_evento">
+                        <option selected>Curso</option>
+                        <option value="Seminario">Seminario</option>
+                        <option value="Congreso">Congreso</option>
+                        <option value="Conferencia">Conferencia</option>
+                      </select>
+"""
+
+        t_evento = {
+            'Conferencia' : Conferencia,
+            'Seminario' : Seminario,
+            'Congreso' : Congreso,
+            'Curso' : Curso
+        }
+
+        Presencial = """
+                      <select class="form-select" aria-label="Default select example" name="modo_evento">
+                        <option selected>Presencial</option>
+                        <option value="Virtual">Virtual</option>
+                      </select>
+"""
+        Virtual = """
+                      <select class="form-select" aria-label="Default select example" name="modo_evento">
+                        <option selected>Virtual</option>
+                        <option value="Presencial">Presencial</option>
+                      </select>
+"""
+        modo = {
+            'Virtual':Virtual,
+            'Presencial':Presencial
+        }
+
+        return render_template('editar_evento.html', modo=modo[modo_evento], t_evento=t_evento[categoria_evento], id=id, nombre_usuario=name, nombre_evento=nombre_evento, tipo_evento=categoria_evento, lugar_evento=lugar_evento, direccion_evento=directorio_evento, fechai_evento=fecha_inicio, fechaf_evento=fecha_fin, modo_evento=modo_evento)
     if request.method == "POST":
         if not session.get("user"):
             return redirect('/')
